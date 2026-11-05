@@ -1,14 +1,16 @@
+import org.w3c.dom.ls.LSOutput;
+
 import java.io.IOException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Main {
     private Scanner scanner;
-    private NoteManager noteApp;
+    private NoteManager noteManager;
 
     public Main() {
         this.scanner = new Scanner(System.in);
-        this.noteApp = NoteManager.loadFromFile("Notes.ser");
+        this.noteManager = NoteManager.loadFromFile("Notes.ser");
 
     }
     public static void main(String[] args) {
@@ -38,7 +40,7 @@ public class Main {
                         System.out.print("Выберите категорию заметки: ");
                         int cat =  scanner.nextInt();
                         scanner.nextLine();
-                        if(!noteApp.checkCategory(cat)) {
+                        if(!noteManager.checkCategory(cat)) {
                             System.out.println("Выберите категорию из списка!");
                             break;
                         }
@@ -46,22 +48,22 @@ public class Main {
                         String title = scanner.nextLine();
                         System.out.println("Введите текст заметки: ");
                         String content = scanner.nextLine();
-                        noteApp.addNote(title, content, cat);
+                        noteManager.addNote(title, content, cat);
                         break;
                     case 2:
-                        noteApp.showAllNotes();
+                        noteManager.showAllNotes();
                         break;
                     case 3:
                         System.out.print("Введите ID заметки: ");
                         int showNoteId = scanner.nextInt();
                         scanner.nextLine();
-                        noteApp.showNoteById(showNoteId);
+                        noteManager.showNoteById(showNoteId);
                         break;
                     case 4:
                         System.out.println("Введите ID заметки: ");
                         int id = scanner.nextInt();
                         scanner.nextLine();
-                        if (!noteApp.checkId(id)) {
+                        if (!noteManager.checkId(id)) {
                             System.out.println("Заметка с таким ID не найдена!");
                             break;
                         }
@@ -69,18 +71,18 @@ public class Main {
                         String editTitle = scanner.nextLine();
                         System.out.println("Введите новый текст (Enter - оставить без изменений): ");
                         String editContent = scanner.nextLine();
-                        noteApp.editNote(id, editTitle, editContent);
+                        noteManager.editNote(id, editTitle, editContent);
                         break;
                     case 5:
                         System.out.println("Введите ID заметки: ");
                         int deleteId = scanner.nextInt();
                         scanner.nextLine();
-                        noteApp.deleteNote(deleteId);
+                        noteManager.deleteNote(deleteId);
                         break;
                     case 6:
                         System.out.println("Введите текст для поиска: ");
                         String findText = scanner.nextLine();
-                        noteApp.findInText(findText);
+                        noteManager.findInText(findText);
                         break;
                     case 7:
                         boolean back = false;
@@ -93,16 +95,16 @@ public class Main {
                             scanner.nextLine();
                             switch (choiseSort) {
                                 case 1:
-                                    noteApp.setSortType(SortType.TITLE);
-                                    noteApp.sortNotesByTitle();
+                                    noteManager.setSortType(SortType.TITLE);
+                                    noteManager.sortNotesByTitle();
                                     break;
                                 case 2:
-                                    noteApp.setSortType(SortType.UPDATED_AT);
-                                    noteApp.sortNotesByUpdatedAt();
+                                    noteManager.setSortType(SortType.UPDATED_AT);
+                                    noteManager.sortNotesByUpdatedAt();
                                     break;
                                 case 3:
-                                    noteApp.setSortType(SortType.CREATED_AT);
-                                    noteApp.sortNotesByCreatedAt();
+                                    noteManager.setSortType(SortType.CREATED_AT);
+                                    noteManager.sortNotesByCreatedAt();
                                     break;
                                 case 0:
                                     back = true;
@@ -113,7 +115,7 @@ public class Main {
 
                     case 0:
                         try {
-                            noteApp.saveToFile("Notes.ser");
+                            noteManager.saveToFile("Notes.ser");
                             System.out.println("Сохранение прошло успешно!");
                             return;
                         } catch (IOException e) {
